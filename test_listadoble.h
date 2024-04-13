@@ -42,12 +42,15 @@ void ListaDoble::insertarOrdenado(int *_pos){
 		NodoDoble *ant=inicio;
 		while(tmp!=NULL){
 			if (tmp->pos[0]>=_pos[0]){
-				nuevo->siguiente=tmp;
-				tmp->anterior=nuevo;
 				if(tmp->anterior!=NULL){
 					ant->siguiente=nuevo;
 					nuevo->anterior=ant;
 				}
+				else{
+					inicio=nuevo;
+				}
+				nuevo->siguiente=tmp;
+				tmp->anterior=nuevo;
 				return;
 			}
 			ant=tmp;
