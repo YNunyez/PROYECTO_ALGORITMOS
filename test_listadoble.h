@@ -1,7 +1,9 @@
 #include <cstdlib>
 #include <iostream>
 using namespace std;
-
+/*
+SE CREA LA CLASE NODODOBLE QUE CONTENDRÁ UN PUNTERO A UN ARREGLO DE DOS ELEMENTOS QUE REPRESENTARÁ UNA POSICIÓN EN EL PISO, EJ: {2,5}
+*/
 class NodoDoble {
 public:
 	int *pos;
@@ -12,7 +14,10 @@ public:
 		siguiente = anterior = NULL;
 	}
 };
-
+/*
+SE CREA LA CLASE LISTADOBLE CON EL EXTRA DE CONTENER ESTAS FUNCIONES: SUSTITUIR(CAMBIA LA POSICIÓN, SE USA SOLO CUANDO LA LISTA TIENE UN ELEMENTO),
+GETPRI(RETORNA LA POSICIÓN (PUNTERO ARRAY) ALMACENADA EN NODO INICIO DE LA LISTA, TAMBIÉN SE USA CUANDO ES UN ELEMENTO) 
+*/
 class ListaDoble {
 	
 private:
@@ -25,11 +30,14 @@ public:
 	void insertarOrdenado(int *_pos);
 	NodoDoble * buscar(int *_pos);
 	NodoDoble * eliminar(int *_pos);
+	void sustituir(int *_pos);
 	bool estaVacia();
 	void imprimir();
-	NodoDoble * pri();
+	int * getPri();
 };
-
+/*
+LAS POSICIONES SE INSERTARÁN EN ORDEN CRECIENTE DE ACUERDO AL PRIMER NÚMERO DEL PAR, EJ: {2,4} -> {3,1} -> {5,6}
+*/
 void ListaDoble::insertarOrdenado(int *_pos){
 	NodoDoble *nuevo = new NodoDoble(_pos);
 	if (inicio==NULL){
@@ -82,6 +90,11 @@ NodoDoble * ListaDoble::eliminar(int *_pos){
 	return NULL;
 }
 
+void ListaDoble::sustituir(int *_pos){
+	NodoDoble *nuevo = new NodoDoble(_pos);
+	inicio=nuevo;
+}
+
 NodoDoble * ListaDoble::buscar(int *_pos){
 	NodoDoble * tmp = inicio;
 	while (tmp != NULL){
@@ -109,6 +122,6 @@ void ListaDoble::imprimir(){
 		cout << "No hay elementos" << endl;
 }
 
-NodoDoble *ListaDoble::pri(){
-	return inicio;
+int *ListaDoble::getPri(){
+	return inicio->pos;
 }
