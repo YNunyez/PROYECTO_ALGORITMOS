@@ -5,9 +5,8 @@
 #include "test_listadoble.h"
 using namespace std;
 
-/*
-ESTA FUNCIÓN RECIBE UN NÚMERO ENTERO Y REGRESA UNA LISTADOBLE CON UNA CANTIDAD ORDENADA DE POSICIONES ALEATORIAS DE ACUERDO AL NÚMERO RECIBIDO
-*/
+
+//RECIBE UN ENTERO Y RETORNA UNA LISTA DOBLE CON ESA CANTIDAD DE PARES ORDENADOS GENERADOS ALEATORIAMENTE
 ListaDoble genpos(int _n){
 	ListaDoble l = ListaDoble();
 	int i=1;
@@ -24,8 +23,14 @@ ListaDoble genpos(int _n){
 	return l;
 }
 
-/*
-LA CLASE ENTIDAD VA A DEFINIR EL COMPORTAMIENTO DE ENEMIGOS, ALIADOS Y JUGADOR. SUS ATRIBUTOS SON LAS CARACTERÍSTICAS QUE TODA ENTIDAD DEBE DE TENER
+/* 
+CADENA NOMBRE, 
+ENTERO PV, 
+ENTERO PA , 
+LISTA DOBLE POS(UN ELEMENTO PARA JUGADOR, 15 PARA LOS ENEMIGOS(SE IRÁN QUITANDO CONFORME SEAN DERROTADOS)) 
+
+LOS MÉTODOS GET RETORNA UN ATRIBUTO ACTUAL DEL OBJETO
+LOS MÉTODOS SET CAMBIAN ATRIBUTOS
 */
 class entidad{
 	private:
@@ -34,20 +39,18 @@ class entidad{
 		int PA;
 		ListaDoble pos;
 	public:
-
-//CONSTRUCTOR
 		entidad(string,int,int,ListaDoble);
-//FUNCIONES
 		void mostrar();
-    void atacar();
-//GETTERS(OBTENER INFORMACION DEL OBJETO) Y SETTERS(CAMBIAR INFORMACION)
-		string getname();
+		string getName();
 		int getPV();
 		int getPA();
-		void setPos(int);
-		void setPosP(int *_n);
 		ListaDoble getPos();
-		
+		void set_Name_PA_PV(string,int,int);
+		void setPA(int);
+		void setPV(int);
+		void setPos(int);	//RECIBE UN ENTERO Y USARÁ LA FUNCIÓN -genpos()- PARA GENERAR VARIAS POCISIONES ALEATORIAS E INSERTARLAS AUTOMÁTICAMENTE A -ListaDoble pos-
+		void setPosP(int *_n); // RECIBE UNA POSICIÓN Y CAMBIA LA ORIGINAL POR ESTA, ÚTIL PARA EL JUGADOR
+		void atacar();		//SE ENCARGARÁ DE LOS ENFRENTAMIENTOS(INCOMPLETO DE MOMENTO)
 };
 
 entidad::entidad(string _name,int _PV, int _PA,ListaDoble _pos){
@@ -58,12 +61,13 @@ entidad::entidad(string _name,int _PV, int _PA,ListaDoble _pos){
 }
 
 void entidad::mostrar(){
+	cout<<endl<<"___________________________________"<<endl<<endl;
 	cout<<"Nombre: "<<name<<endl<<"PV: "<<PV<<endl<<"PA: "<<PA<<endl<<"Posición: ";
 	pos.imprimir();
 	cout<<endl<<"___________________________________"<<endl;
 }
 
-string entidad::getname(){
+string entidad::getName(){
 	return name;
 }
 	
@@ -75,13 +79,18 @@ int entidad::getPA(){
 	return PA;
 }
 
+ListaDoble entidad::getPos(){
+	return pos;
+}
+void entidad::set_Name_PA_PV(string _name,int _PA,int _PV){
+	name=_name;
+	PA=_PA;
+	PV=_PV;
+}
+
 void entidad::setPos(int _n){
 	pos=genpos(_n);
 }
 void entidad::setPosP(int *_n){
 	pos.sustituir(_n);
-}
-
-ListaDoble entidad::getPos(){
-	return pos;
 }
