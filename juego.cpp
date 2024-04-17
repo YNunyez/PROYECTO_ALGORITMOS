@@ -61,41 +61,33 @@ int *tirardados(int *y){
 				}
 				break;
 		}
-		cout<<endl<<endl<<y[0]<<","<<y[1]<<endl;
 		u++;
 		a=b;
 	}
 	return y;
 }
 
-/*int * genposind(){
-	int y[2];
-	int *u = y;
-	u[0]=1 + rand() % 10;
-	u[1]=1 + rand() % 10;
-	return u;
-}*/
-
-
-
+// en main se crean los objetos(enemigos y jugador)
 int main(){
-	srand(time(NULL));
-	setlocale(LC_CTYPE, "Spanish");
-	mapa();
-	int pos[]={0,0};
+	srand(time(NULL));				// para randomizar la funcion rand() ubicada en tirardados y otras funciones del código
+	setlocale(LC_CTYPE, "Spanish");			// permite más carácteres en la consola
+	int pos[]={1,1};	
 	int p,*o=pos;
 	ListaDoble posj1 = ListaDoble(),posen = ListaDoble();
-	entidad en = entidad("a",0,0,posen);
+	entidad en = entidad("a",0,0,posen);							
 	posj1.insertarOrdenado(o);
 	entidad j1 = entidad("Errësirë",3,3,posj1);
-	j1.mostrar();
-	j1.setPosP(tirardados(posj1.getPri()));
-	j1.mostrar();
 	string nen[10]={"Arañas","Golems de barro","Zorros oscuros","Duendes","Esqueletos","Orcos","Golems de piedra","Espectros","Demonios","Arcangel"};
-	en = entidad(nen[2],2,5,genpos(15));
-	en.mostrar();
-	string fil[10]={"1","2","3","4","5","6","7","8","9","10"};
-	string col[10]={"A","B","C","D","E","F","G","H","I","J"};
 	
+	for(int piso=1;piso<11;piso++){
+		cout<<"Piso: "<<piso<<endl;
+		en.set_Name_PA_PV(nen[piso-1],piso,piso+1);
+		cout<<"Enemigos: ";
+		en.mostrar();
+		cout<<"Jugador: ";
+		j1.mostrar();
+		j1.setPosP(tirardados(posj1.getPri()));	
+		j1.mostrar();
+	}	
 	return 0;
 }
