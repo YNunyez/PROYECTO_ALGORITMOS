@@ -82,19 +82,19 @@ int* tirardados(int* y) {
         cout << "3) Adelante" << endl;
         cout << "4) Atras" << endl << endl;
 
-        bool valid = false;  // Flag to check if input is valid
+        bool valid = false;  // Bandera para validar que el caracter ingresado sea valido
 
         while (!valid) {
             cout << "Seleccion: ";
             cin >> x;
 
             if (cin.fail() || (x < 1 || x > 4)) {
-                // Clear the error flag and ignore invalid input
+                // Devuelve la bandera su valor original y elimina el caracter invalido 
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Caracter invalido, por favor haga su seleccion otra vez" << endl;
             } else {
-                valid = true;  // Input is valid
+                valid = true;  // Cmabia el valor de la bandera a verdadero para continuar con los casos 
             }
         }
 
