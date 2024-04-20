@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <time.h>
 #include <locale.h>
+#include <ctime>   
+#include <limits>  
 #include "test_entidad.h"
 using namespace std;
 const int FILAS = 11;
@@ -67,58 +69,68 @@ ListaDoble genpos(int _n,ListaDoble _l){
 	return l;
 }
 
-int *tirardados(int *y){
-	int x,a,b,u=0;
-	a = 1 + rand() % 6;
-	b = 1 + rand() % 6;
-	while (u<2){
-		cout<<endl<<"Numero: "<<a<<endl;
-		cout<<endl<<"Seleccione direccion: "<<endl<<endl;
-		cout<<"1) Derecha"<<endl;
-		cout<<"2) Izquierda"<<endl;
-		cout<<"3) Adelante"<<endl;
-		cout<<"4) Atras"<<endl<<endl;
-		cout<<"Seleccion: ";cin>>x;
-		switch (x){
-			case 1:
-				y[0]=y[0]+a;
-				if (y[0]>10){
-					y[0]=10;
-				}
-				u++;
-				a=b;
-				break;
-			case 2:
-				y[0]=y[0]-a;
-				if (y[0]<1){
-					y[0]=1;
-				}
-				u++;
-				a=b;
-				break;
-			case 3:
-				y[1]=y[1]+a;
-				if (y[1]>10){
-					y[1]=10;
-				}
-				u++;
-				a=b;
-				break;
-			case 4:
-				y[1]=y[1]-a;
-				if (y[1]<1){
-					y[1]=1;
-				}
-				u++;
-				a=b;
-				break;
-			default:
-				cout<<"Comando inválido";
-		}
-	}
-	return y;
-}
+int* tirardados(int* y) {
+    int x, a, b, u = 0;
+    a = 1 + rand() % 6;
+    b = 1 + rand() % 6;
+    
+    while (u < 2) {
+        cout << endl << "Numero: " << a << endl;
+        cout << endl << "Seleccione direccion:" << endl << endl;
+        cout << "1) Derecha" << endl;
+        cout << "2) Izquierda" << endl;
+        cout << "3) Adelante" << endl;
+        cout << "4) Atras" << endl << endl;
 
+        bool valid = false;  // Flag to check if input is valid
+
+        while (!valid) {
+            cout << "Seleccion: ";
+            cin >> x;
+
+            if (cin.fail() || (x < 1 || x > 4)) {
+                // Clear the error flag and ignore invalid input
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Caracter invalido, por favor haga su seleccion otra vez" << endl;
+            } else {
+                valid = true;  // Input is valid
+            }
+        }
+
+        switch (x) {
+            case 1:
+                y[0] += a;
+                if (y[0] > 10) {
+                    y[0] = 10;
+                }
+                break;
+            case 2:
+                y[0] -= a;
+                if (y[0] < 1) {
+                    y[0] = 1;
+                }
+                break;
+            case 3:
+                y[1] += a;
+                if (y[1] > 10) {
+                    y[1] = 10;
+                }
+                break;
+            case 4:
+                y[1] -= a;
+                if (y[1] < 1) {
+                    y[1] = 1;
+                }
+                break;
+        }
+
+        u++;
+        a = b;  // Switch to the next value
+    }
+
+    return y;
+}
 
 
 // en main se crean los objetos(enemigos y jugador)
