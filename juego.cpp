@@ -25,7 +25,7 @@ char mapa[FILAS][COLUMNAS] = {
 void _mapa(int *g,int *h) {
     // Agregar una letra en la posiciÃ³n C, 10
     
-    mapa[g[1]][g[0]] = 'P'; // Fila 10, Columna 3 (la indexaciÃ³n comienza desde 0)
+    mapa[g[1]][g[0]] = 'P'; // Fila , Columna  (la indexaciÃ³n comienza desde 0)
 	mapa[h[1]][h[0]] = 'A';
     // Imprimir el mapa
     for (int i = 0; i < FILAS; ++i) {
@@ -67,57 +67,69 @@ ListaDoble genpos(int _n,ListaDoble _l){
 	return l;
 }
 
-int *tirardados(int *y){
-	int x,a,b,u=0;
-	a = 1 + rand() % 6;
-	b = 1 + rand() % 6;
-	while (u<2){
-		cout<<endl<<"Numero: "<<a<<endl;
-		cout<<endl<<"Seleccione direccion: "<<endl<<endl;
-		cout<<"1) Derecha"<<endl;
-		cout<<"2) Izquierda"<<endl;
-		cout<<"3) Adelante"<<endl;
-		cout<<"4) Atras"<<endl<<endl;
-		cout<<"Seleccion: ";cin>>x;
-		switch (x){
-			case 1:
-				y[0]=y[0]+a;
-				if (y[0]>10){
-					y[0]=10;
-				}
-				u++;
-				a=b;
-				break;
-			case 2:
-				y[0]=y[0]-a;
-				if (y[0]<1){
-					y[0]=1;
-				}
-				u++;
-				a=b;
-				break;
-			case 3:
-				y[1]=y[1]+a;
-				if (y[1]>10){
-					y[1]=10;
-				}
-				u++;
-				a=b;
-				break;
-			case 4:
-				y[1]=y[1]-a;
-				if (y[1]<1){
-					y[1]=1;
-				}
-				u++;
-				a=b;
-				break;
-			default:
-				cout<<"Comando inválido";
-		}
-	}
-	return y;
+int* tirardados(int* y) {
+    int x, a, b, u = 0;
+    a = 1 + rand() % 6;
+    b = 1 + rand() % 6;
+    
+    while (u < 2) {
+        cout << endl << "Numero: " << a << endl;
+        cout << endl << "Seleccione direccion:" << endl << endl;
+        cout << "1) Derecha" << endl;
+        cout << "2) Izquierda" << endl;
+        cout << "3) Adelante" << endl;
+        cout << "4) Atras" << endl << endl;
+
+        bool valid = false;  // Bandera para verificar si el valor ingresado es valido
+
+        while (!valid) {
+            cout << "Seleccion: ";
+            cin >> x;
+
+            if (cin.fail() || (x < 1 || x > 4)) {
+                // Devuelve la bandera al valor inicial y elimina el caracter invalido 
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Caracter invalido, por favor haga su seleccion otra vez" << endl;
+            } else {
+                valid = true;  // Esto en caso de que el valor ingresado sea valido 
+            }
+        }
+
+        switch (x) {
+            case 1:
+                y[0] += a;
+                if (y[0] > 10) {
+                    y[0] = 10;
+                }
+                break;
+            case 2:
+                y[0] -= a;
+                if (y[0] < 1) {
+                    y[0] = 1;
+                }
+                break;
+            case 3:
+                y[1] += a;
+                if (y[1] > 10) {
+                    y[1] = 10;
+                }
+                break;
+            case 4:
+                y[1] -= a;
+                if (y[1] < 1) {
+                    y[1] = 1;
+                }
+                break;
+        }
+
+        u++;
+        a = b;  // Switch to the next value
+    }
+
+    return y;
 }
+
 
 
 
