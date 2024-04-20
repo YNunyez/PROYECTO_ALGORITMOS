@@ -1,8 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 using namespace std;
-string ls="ABCDEFG";
-
+string ls="ABCDEFGHIJ";
 
 //SE CREA LA CLASE NODODOBLE QUE CONTENDRÁ UN PUNTERO A UN ARREGLO DE DOS ELEMENTOS QUE REPRESENTARÁ UNA POSICIÓN EN EL PISO, EJ: {2,5}
 class NodoDoble {
@@ -33,10 +32,9 @@ public:
 	void insertarOrdenado(int *_pos);
 	NodoDoble * buscar(int *_pos);
 	NodoDoble * eliminar(int *_pos);
-	void sustituir(int *_pos);
 	bool estaVacia();
 	void imprimir();
-	int * getPri();
+	int *getPri();
 };
 
 void ListaDoble::insertarOrdenado(int *_pos){
@@ -91,16 +89,11 @@ NodoDoble * ListaDoble::eliminar(int *_pos){
 	}
 	return NULL;
 }
-
-void ListaDoble::sustituir(int *_pos){
-	NodoDoble *nuevo = new NodoDoble(_pos);
-	inicio=nuevo;
-}
 	
 NodoDoble * ListaDoble::buscar(int *_pos){
 	NodoDoble * tmp = inicio;
 	while (tmp != NULL){
-		if (tmp->pos == _pos)
+		if (tmp->pos[0]==_pos[0]&&tmp->pos[1]==_pos[1])
 			return tmp;
 		tmp = tmp->siguiente;
 	}
@@ -118,12 +111,7 @@ void ListaDoble::imprimir(){
 			cout<<ls[tmp->pos[0]-1]<<","<<tmp->pos[1]<<" ; ";
 			tmp = tmp->siguiente;
 		}
-		//cout << endl;
 	}
 	else
-		cout << "No hay elementos" ;//<< endl;
-}
-
-int *ListaDoble::getPri(){
-	return inicio->pos;
+		cout << "No hay elementos" ;
 }
