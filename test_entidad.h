@@ -5,24 +5,6 @@
 #include "test_listadoble.h"
 using namespace std;
 
-
-//RECIBE UN ENTERO Y RETORNA UNA LISTA DOBLE CON ESA CANTIDAD DE PARES ORDENADOS GENERADOS ALEATORIAMENTE
-ListaDoble genpos(int _n){
-	ListaDoble l = ListaDoble();
-	int i=1;
-	int a,b,*o;
-	while (i<=_n){
-		o[0]=1 + rand() % 10;
-		o[1]=1 + rand() % 10;
-		if(!l.buscar(o)){
-			l.insertarOrdenado(o);
-		}
-		o=new int;
-		i++;
-	}
-	return l;
-}
-
 /* 
 CADENA NOMBRE, 
 ENTERO PV, 
@@ -37,34 +19,67 @@ class entidad{
 		string name;
 		int PV;
 		int PA;
-		ListaDoble pos;
+		int * pos;
+		entidad * aliado1,* aliado2,* aliado3;
 	public:
-		entidad(string,int,int,ListaDoble);
-		void mostrar();
+		entidad(string,int,int,int*);
+		void mostrar(int);
+		bool enfrentar(entidad);
 		string getName();
 		int getPV();
 		int getPA();
-		ListaDoble getPos();
+		int *getPos();
+		void setAliado(entidad,int);
 		void set_Name_PA_PV(string,int,int);
 		void setPA(int);
 		void setPV(int);
-		void setPos(int);	//RECIBE UN ENTERO Y USARÁ LA FUNCIÓN -genpos()- PARA GENERAR VARIAS POCISIONES ALEATORIAS E INSERTARLAS AUTOMÁTICAMENTE A -ListaDoble pos-
-		void setPosP(int *_n); // RECIBE UNA POSICIÓN Y CAMBIA LA ORIGINAL POR ESTA, ÚTIL PARA EL JUGADOR
+		void setPos(int*);	//RECIBE UN ENTERO Y USARÁ LA FUNCIÓN -genpos()- PARA GENERAR VARIAS POCISIONES ALEATORIAS E INSERTARLAS AUTOMÁTICAMENTE A -ListaDoble pos-
 		void atacar();		//SE ENCARGARÁ DE LOS ENFRENTAMIENTOS(INCOMPLETO DE MOMENTO)
 };
 
-entidad::entidad(string _name,int _PV, int _PA,ListaDoble _pos){
+entidad::entidad(string _name,int _PV, int _PA,int *_pos){
 	name=_name;
 	PV=_PV;
 	PA=_PA;
-	pos=_pos;	
+	pos=_pos;
+	aliado1=NULL;
+	aliado2=NULL;
+	aliado3=NULL;	
 }
 
-void entidad::mostrar(){
-	cout<<endl<<"___________________________________"<<endl<<endl;
-	cout<<"Nombre: "<<name<<endl<<"PV: "<<PV<<endl<<"PA: "<<PA<<endl<<"Posición: ";
-	pos.imprimir();
-	cout<<endl<<"___________________________________"<<endl;
+bool entidad::enfrentar(entidad _en){
+	int det = rand() % 2;
+	while (_en.PV>0 && PV>0){
+		if(det == 1){
+			det=0;
+			_en.PV=_en.PV-PA;
+			if(_en.PV<=0){
+				return true;
+			}
+		} 
+		PV=(PV-_en.PA);
+		if(PV<=0){
+			return false;
+		}
+		_en.PV=_en.PV-PA;
+		if(_en.PV<=0){
+			return true;
+		}
+	}	
+}
+
+
+
+void entidad::mostrar(int t){
+	if(t==1){
+		cout<<"Posición: "<<ls[pos[0]-1]<<","<<pos[1];
+		return;
+	}
+	cout<<"Nombre: "<<name<<endl<<"PV: "<<PV<<endl<<"PA: "<<PA<<endl;
+	if(t==2){
+		cout<<"Posición: "<<ls[pos[0]-1]<<","<<pos[1];
+	}
+	return;
 }
 
 string entidad::getName(){
@@ -79,18 +94,36 @@ int entidad::getPA(){
 	return PA;
 }
 
-ListaDoble entidad::getPos(){
+int *entidad::getPos(){
 	return pos;
 }
+void entidad::setAliado(entidad _aliado,int _campo){
+	if(_campo == 1){
+		aliado1=&_aliado;
+		return;
+	}
+	if(_campo == 2){
+		aliado2=&_aliado;
+		return;
+	}
+	aliado3=&_aliado;
+}
+
 void entidad::set_Name_PA_PV(string _name,int _PA,int _PV){
 	name=_name;
 	PA=_PA;
 	PV=_PV;
 }
 
-void entidad::setPos(int _n){
-	pos=genpos(_n);
+void entidad::setPV(int _PV){
+	PV=_PV;
 }
-void entidad::setPosP(int *_n){
-	pos.sustituir(_n);
+
+
+void entidad::setPA(int _PA){
+	PA=_PA;
+}
+
+void entidad::setPos(int *_pos){
+	pos=_pos;
 }
