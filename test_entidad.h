@@ -14,6 +14,7 @@ LISTA DOBLE POS(UN ELEMENTO PARA JUGADOR, 15 PARA LOS ENEMIGOS(SE IRÁN QUITANDO
 LOS MÉTODOS GET RETORNA UN ATRIBUTO ACTUAL DEL OBJETO
 LOS MÉTODOS SET CAMBIAN ATRIBUTOS
 */
+
 class entidad{
 	private:
 		string name;
@@ -22,8 +23,8 @@ class entidad{
 		int PV_max;
 		int PA;
 		int * pos;
-		entidad * aliado1,* aliado2,* aliado3;
 	public:
+		entidad * aliado1,* aliado2,* aliado3;
 		entidad(string,int,int,int,int*);
 		void mostrar(int);
 		bool enfrentar(entidad);
@@ -33,6 +34,7 @@ class entidad{
 		int getPA();
 		string getArma();
 		int *getPos();
+		string printAliado(int);
 		void setAliado(entidad,int);
 		void set_Name_PA_PV(string,int,int,int);
 		void setArma(int);
@@ -57,16 +59,20 @@ bool entidad::enfrentar(entidad _en){
 	int det = rand() % 2;
 	while (_en.PV>0 && PV>0){
 		if(det == 1){
+			cout<<endl<<name<<" golpea *"<<endl;
 			det=0;
 			_en.PV=_en.PV-PA;
 			if(_en.PV<=0){
 				return true;
 			}
 		} 
+		cout<<endl<<"Enemigo golpea *"<<endl;
 		PV=(PV-_en.PA);
 		if(PV<=0){
+			
 			return false;
 		}
+		cout<<endl<<name<<" golpea *"<<endl;
 		_en.PV=_en.PV-PA;
 		if(_en.PV<=0){
 			return true;
@@ -107,6 +113,30 @@ int entidad::getPA(){
 int *entidad::getPos(){
 	return pos;
 }
+
+string entidad::printAliado(int _pos){
+	string nombre;
+	if(_pos == 1){
+		if(aliado1!=NULL){
+			nombre=aliado1->name;
+			return nombre;
+		}
+		return "Desocupado";
+	}
+	if(_pos == 2){
+		if(aliado2!=NULL){
+			nombre=aliado2->name;
+			return nombre;
+		}
+		return "Desocupado";
+	}
+	if(aliado3!=NULL){
+			nombre=aliado3->name;
+			return nombre;
+		}
+		return "Desocupado";
+}
+
 void entidad::setAliado(entidad _aliado,int _campo){
 	if(_campo == 1){
 		aliado1=&_aliado;
@@ -147,10 +177,6 @@ void entidad::setArma(int _sel){
 		arma=_arma;
 		PA=_PA;
 	}
-}
-
-void entidad::setPos(int *_pos){
-	pos=_pos;
 }
 
 void entidad::setPos(int *_pos){
