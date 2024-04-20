@@ -5,18 +5,38 @@
 #include <locale.h>
 #include "test_entidad.h"
 using namespace std;
+const int FILAS = 11;
+const int COLUMNAS = 11;
 
+char mapa[FILAS][COLUMNAS] = {
+    {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'},
+    {'1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'2', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'3', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'4', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'5', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'6', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'7', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'8', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'9', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'X',' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+};
 
-void mapa(int* _pj){
-	cout<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"10 |   |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"9  |   |   |   |   |   |   |   |   |   |   |"<<endl;
-	cout<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"8  |   |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl;
-	cout<<"7  |   |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"6  |   |   |   |   |   |   |   |   |   |   |"<<endl;
-	cout<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"5  |   |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl;
-	cout<<"4  |   |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"3  |   |   |   |   |   |   |   |   |   |   |"<<endl;
-	cout<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"2  |   |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl;
-	cout<<"1  | P |   |   |   |   |   |   |   |   |   |"<<endl<<"   +---+---+---+---+---+---+---+---+---+---+"<<endl<<"     A   B   C   D   E   F   G   H   I   J  "<<endl;
-	system("pause");
-	return;
+void _mapa(int *g,int *h) {
+    // Agregar una letra en la posiciÃ³n C, 10
+    
+    mapa[g[1]][g[0]] = 'P'; // Fila 10, Columna 3 (la indexaciÃ³n comienza desde 0)
+	mapa[h[1]][h[0]] = 'A';
+    // Imprimir el mapa
+    for (int i = 0; i < FILAS; ++i) {
+        for (int j = 0; j < COLUMNAS; ++j) {
+            cout << mapa[i][j] << " ";
+        }
+        cout << endl;
+    }
+	mapa[g[1]][g[0]] = ' ';
+	mapa[h[1]][h[0]] = ' ';
+    return;
 }
 
 //Genera una posición aleatoria
@@ -52,43 +72,49 @@ int *tirardados(int *y){
 	a = 1 + rand() % 6;
 	b = 1 + rand() % 6;
 	while (u<2){
-		cout<<endl<<"NUMERO: "<<a<<endl;
-		cout<<endl<<"SELECCIONE DIRECCION: "<<endl<<endl;
-		cout<<"1) DERECHA"<<endl;
-		cout<<"2) IZQUIERDA"<<endl;
-		cout<<"3) ADELANTE"<<endl;
-		cout<<"4) ATRAS"<<endl<<endl;
-		cout<<"SELECCION: ";cin>>x;
+		cout<<endl<<"Numero: "<<a<<endl;
+		cout<<endl<<"Seleccione direccion: "<<endl<<endl;
+		cout<<"1) Derecha"<<endl;
+		cout<<"2) Izquierda"<<endl;
+		cout<<"3) Adelante"<<endl;
+		cout<<"4) Atras"<<endl<<endl;
+		cout<<"Seleccion: ";cin>>x;
 		switch (x){
 			case 1:
 				y[0]=y[0]+a;
 				if (y[0]>10){
 					y[0]=10;
 				}
+				u++;
+				a=b;
 				break;
 			case 2:
 				y[0]=y[0]-a;
 				if (y[0]<1){
 					y[0]=1;
 				}
+				u++;
+				a=b;
 				break;
 			case 3:
-				
 				y[1]=y[1]+a;
 				if (y[1]>10){
 					y[1]=10;
 				}
+				u++;
+				a=b;
 				break;
 			case 4:
-				
 				y[1]=y[1]-a;
 				if (y[1]<1){
 					y[1]=1;
 				}
+				u++;
+				a=b;
 				break;
+			default:
+				cout<<"Comando inválido";
 		}
-		u++;
-		a=b;
 	}
 	return y;
 }
@@ -100,24 +126,25 @@ int main(){
 	srand(time(NULL));						// para randomizar la funcion rand() ubicada en tirardados y otras funciones del código
 	setlocale(LC_CTYPE, "Spanish");			// permite más carácteres en la consola
 	int pos[]={1,1};	
-	int p,*o=pos;
-	entidad en = entidad("a",0,0,0,o);							
+	int p,d,*o=pos,*k,*v;
+	entidad en = entidad("a",0,0,0,k);							
 	entidad j1 = entidad("Errësirë",3,3,3,o);
 	ListaDoble ens = ListaDoble();
 	ListaDoble cofres = ListaDoble();
 	string nen[10]={"Arañas","Golems de barro","Zorros oscuros","Duendes","Esqueletos","Orcos","Golems de piedra","Espectros","Demonios","Arcangel"};
-	string aliados[10]={""};
+	string aliados[10]={"Juan","Pedro","Jose","Rodolfo","David","Arturo","Germán","Victor","Ignacio","Gonzalo"};
 	for(int piso=1;piso<11;piso++){
-		mapa(o);
+		
 		o[0]=1;o[1]=1;
 		cout<<"Piso: "<<piso<<endl;
 		en.set_Name_PA_PV(nen[piso-1],piso,piso+1,piso+1);
 		ens = genpos(16,ens);
 		cofres = genpos(15,ens);
 		int *y=_genpos();
-		while(ens.buscar(y)!=NULL){
+		while(ens.buscar(y)!=NULL or cofres.buscar(y)!=NULL){
 			y=_genpos();
 		}
+		_mapa(o,y);
 		cout<<"___________"<<endl;
 		cout<<endl<<"Enemigos: "<<endl;
 		en.mostrar(0);
@@ -133,21 +160,40 @@ int main(){
 		cout<<endl<<"___________"<<endl;
 		while(o[0]+o[1]<20){
 			j1.setPos(tirardados(j1.getPos()));	
+			_mapa(o,y);
 			if(ens.buscar(o)!=NULL){
-				cout<<endl<<"___________"<<endl<<endl;
+				/*cout<<endl<<"___________"<<endl<<endl;
 				en.mostrar(0);
 				cout<<endl<<"___________"<<endl<<endl;
-				j1.mostrar(2);
+				j1.mostrar(0);
+				cout<<endl<<"___________"<<endl;*/
+				p = rand() % 4;
+				entidad *enfrentado = new entidad("",0,0,0,o);
+				switch(p){
+					case 0:
+						enfrentado=&j1;
+						break;
+					case 1:
+						enfrentado=j1.aliado1;
+						break;
+					case 2:
+						enfrentado=j1.aliado2;
+						break;
+					case 3:
+						enfrentado=j1.aliado2;
+						break;
+				} 
+				
 				if(j1.enfrentar(en)){
 					ens.eliminar(o);
-					cout<<endl<<"___________"<<endl<<endl<<"Victoria"<<endl<<"___________"<<endl;
+					cout<<endl<<"___________"<<endl<<endl<<"Victoria"<<endl<<"___________"<<endl<<endl;
 				}
 				else{
-					cout<<endl<<"___________"<<endl<<endl<<"Derrota"<<endl<<"___________"<<endl;
+					cout<<endl<<"___________"<<endl<<endl<<"Derrota"<<endl<<"___________"<<endl<<endl;
 					return 0;
 				}
-				j1.mostrar(2);
-				cout<<endl;
+				j1.mostrar(0);
+				cout<<endl<<"___________"<<endl;
 				ens.imprimir();cout<<endl;
 			}
 			if(cofres.buscar(o)!=NULL){
@@ -156,8 +202,8 @@ int main(){
 				int cont = rand() % 3;
 				switch(cont){
 					case 0:{
-						int selec = 2*piso - rand() % 3;
-						j1.setArma(selec);
+						p = 2*piso - rand() % 3;
+						j1.setArma(p);
 						break;
 					}
 					case 1:
@@ -166,14 +212,33 @@ int main(){
 						break;
 					case 2:
 						cout<<"Recuperar PS";
-						int r=j1.getPV_max()/10;
-						if (r==0){
-							r++;
+
+						p=j1.getPV_max()/10;
+						if (p==0){
+							p++;
 						}
-						j1.setPV(j1.getPV()+r);
+						j1.setPV(j1.getPV()+p);
+						if(j1.getPV()>j1.getPV_max()){
+							j1.setPV(j1.getPV_max());
+						}
 						break;
 				}
-				j1.mostrar(2);
+				cout<<endl;
+				j1.mostrar(0);
+			}
+			if(o[0]==y[0]&&o[1]==y[1]){
+				entidad aly = entidad(aliados[piso-1],piso+1,piso+1,piso,o);
+				cout<<"¡Has encontrado a "<<aly.getName()<<"!";
+				cout<<"Quieres que "<<aly.getName()<<" se una a tu grupo"<<endl;
+				cout<<"1)Sí\n2)No\nSelección: ";cin>>p;
+				if(p==1){
+					cout<<"Seleccione ubicacion: ";
+					cout<<endl<<"1)"<<j1.printAliado(1)<<endl;
+					cout<<endl<<"2)"<<j1.printAliado(2)<<endl;
+					cout<<endl<<"3)"<<j1.printAliado(3)<<endl;
+					cout<<"Seleccion: ";cin>>p;
+					j1.setAliado(aly,p);
+				}	
 			}
 			cout<<"___________"<<endl<<endl;
 			cout<<"Posición actual: ";j1.mostrar(1);
