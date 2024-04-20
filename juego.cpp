@@ -31,18 +31,18 @@ int *_genpos(){
 ListaDoble genpos(int _n,ListaDoble _l){
 	ListaDoble l = ListaDoble();
 	int i=1;
-	int *o;
+	int a,b,*o;
 	while (i<=_n){
 		o[0]=1 + rand() % 10;
 		o[1]=1 + rand() % 10;
-		if (o[0]==1){
+		if((o[0]&&o[1])==1){
 			o[1]=2 + rand() % 9;
 		}
-		if(!l.buscar(o)&&!_l.buscar(o)){
+		if(l.buscar(o)==NULL&&_l.buscar(o)==NULL){
 			l.insertarOrdenado(o);
-			o=new int;
 			i++;
-		}		
+		}
+		o=new int;		
 	}
 	return l;
 }
@@ -94,10 +94,6 @@ int *tirardados(int *y){
 }
 
 
-bool buscar(entidad j1,entidad otro){
-	int *pj=j1.getPos();
-}
-
 
 // en main se crean los objetos(enemigos y jugador)
 int main(){
@@ -105,18 +101,18 @@ int main(){
 	setlocale(LC_CTYPE, "Spanish");			// permite más carácteres en la consola
 	int pos[]={1,1};	
 	int p,*o=pos;
-	entidad en = entidad("a",0,0,o);							
-	entidad j1 = entidad("Errësirë",3,3,o);
+	entidad en = entidad("a",0,0,0,o);							
+	entidad j1 = entidad("Errësirë",3,3,3,o);
 	ListaDoble ens = ListaDoble();
 	ListaDoble cofres = ListaDoble();
 	string nen[10]={"Arañas","Golems de barro","Zorros oscuros","Duendes","Esqueletos","Orcos","Golems de piedra","Espectros","Demonios","Arcangel"};
-	string aliados[10]={"Arañas","Golems de barro","Zorros oscuros","Duendes","Esqueletos","Orcos","Golems de piedra","Espectros","Demonios","Arcangel"};
+	string aliados[10]={""};
 	for(int piso=1;piso<11;piso++){
 		mapa(o);
 		o[0]=1;o[1]=1;
 		cout<<"Piso: "<<piso<<endl;
-		en.set_Name_PA_PV(nen[piso-1],piso,piso+1);
-		ens = genpos(15,ens);
+		en.set_Name_PA_PV(nen[piso-1],piso,piso+1,piso+1);
+		ens = genpos(16,ens);
 		cofres = genpos(15,ens);
 		int *y=_genpos();
 		while(ens.buscar(y)!=NULL){
@@ -152,7 +148,32 @@ int main(){
 				}
 				j1.mostrar(2);
 				cout<<endl;
-				ens.imprimir();
+				ens.imprimir();cout<<endl;
+			}
+			if(cofres.buscar(o)!=NULL){
+				cout<<endl<<"Apareció un cofre..."<<endl;
+				cout<<"Encontraste :";
+				int cont = rand() % 3;
+				switch(cont){
+					case 0:{
+						int selec = 2*piso - rand() % 3;
+						j1.setArma(selec);
+						break;
+					}
+					case 1:
+						cout<<"Aumentar PS_MAX";
+						j1.setPV_max(j1.getPV_max()+1);
+						break;
+					case 2:
+						cout<<"Recuperar PS";
+						int r=j1.getPV_max()/10;
+						if (r==0){
+							r++;
+						}
+						j1.setPV(j1.getPV()+r);
+						break;
+				}
+				j1.mostrar(2);
 			}
 			cout<<"___________"<<endl<<endl;
 			cout<<"Posición actual: ";j1.mostrar(1);
