@@ -142,7 +142,7 @@ int main(){
 		cofres = genpos(15,ens);
 		int *y=_genpos();
 		while(ens.buscar(y)!=NULL or cofres.buscar(y)!=NULL){
-			y=_genpos();
+			y=_genpos();						// y es la posición del aliado, (puntero array, par ordenado)
 		}
 		_mapa(o,y);
 		cout<<"___________"<<endl;
