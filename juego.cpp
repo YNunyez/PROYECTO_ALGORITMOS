@@ -3,12 +3,13 @@
 #include <cstdlib>
 #include <time.h>
 #include <locale.h>
-#include "test_entidad.h"
+#include "test_entidad_03.h"
 #include <stdio.h>
 using namespace std;
 const int FILAS = 11;
 const int COLUMNAS = 11;
-
+string nen[10]={"Araña","Golem de barro","Zorro oscuros","Duende","Esqueleto","Orco","Golem de piedra","Espectro","Demonio","Arcangel"};
+string l_aliados[10]={"Juan","Pedro","Jose","Ignacio","David","Arturo","Germán","Victor","Ezekiel","Gonzalo"};
 string mapa[FILAS][COLUMNAS] = {
     {"  " , "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"},
     {" 1", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
@@ -126,54 +127,21 @@ int *tirardados(int *y,int *al,int h){
 	return y;
 }
 
-void asignar_aliado(entidad al,entidad *j1){
-	char p;
-	cout<<"¡Encontraste una taberna y entraste..."<<endl<<endl;
-	system("pause");system("cls");
-	cout<<"Conociste a "<<al.getName()<<" y lo puedes unir a tu grupo!"<<endl;
-	while(true){
-		cout<<"Selecciona donde ubicarlo: ";
-		cout<<endl;
-		cout<<endl<<"1)"<<j1->printAliado(1)<<endl;
-		cout<<endl<<"2)"<<j1->printAliado(2)<<endl;
-		cout<<endl<<"3)"<<j1->printAliado(3)<<endl;
-		cout<<endl<<"4)"<<"---No quiero unirlo---"<<endl<<endl;
-		cout<<"Seleccion: ";cin>>p;	
-		cout<<endl<<endl;
-		if('0'<p<'4'){
-			j1->setAliado(al,p);
-			cout<<al.getName()<<" se ha unido a tu grupo!"<<endl;
-			return;
-		}
-		if(p=='4'){
-			cout<<"Decidiste no agregar a "<<al.getName()<<" a tu grupo";
-			return;
-		}
-		system("cls");
-		cout<<"Comando inválido"<<endl;
-		system("pause");
-	}
-	
-}
-
 
 // en main se crean los objetos(enemigos y jugador)
 int main(){
 	srand(time(NULL));						// para randomizar la funcion rand() ubicada en tirardados y otras funciones del código
 	setlocale(LC_CTYPE, "Spanish");			// permite más carácteres en la consola
-	int pos[]={1,1};	
+	int pos[]={1,1};
 	int p,d,*o=pos,*k,*v;
 	char m;
-	entidad en = entidad("a",0,0,0,k);		
-						
+	entidad en = entidad("a",0,0,0,k);				
 	entidad *j1 = new entidad("Errësirë",100,100,100,o);
-	
 	ListaDoble ens = ListaDoble();
 	ListaDoble cofres = ListaDoble();
-	string nen[10]={"Araña","Golem de barro","Zorro oscuros","Duende","Esqueleto","Orco","Golem de piedra","Espectro","Demonio","Arcangel"};
-	string aliados[10]={"Juan","Pedro","Jose","Rodolfo","David","Arturo","Germán","Victor","Ignacio","Gonzalo"};
 	for(int piso=1;piso<11;piso++){
 		o[0]=1;o[1]=1;
+		bool tr = true;
 		cout<<endl;
 		en.set_Name_PA_PV(nen[piso-1],piso,piso+1,piso+1);
 		ens = genpos(16,ens);
@@ -182,94 +150,32 @@ int main(){
 		while(ens.buscar(y)!=NULL or cofres.buscar(y)!=NULL){
 			y=_genpos();
 		}
-		/*
-		cout<<"___________"<<endl;
-		cout<<endl<<"Enemigos: "<<endl;
-		en.mostrar(0);
-		cout<<"Posiciones: ";
-		ens.imprimir();
-		cout<<endl<<"___________"<<endlcout<<"___________"<<endl;
-		cout<<endl<<"Cofres: ";
-		cofres.imprimir();
-		cout<<endl<<"___________"<<endl;
-		cout<<"___________"<<endl;
-		cout<<endl<<"Jugador: "<<endl;
-		j1->mostrar(2);
-		cout<<endl<<"___________"<<endl;*/
 		system("cls");
 		while(o[0]+o[1]<20){
-			j1->setPos(tirardados(j1->getPos(),y,piso));	
-			if(ens.buscar(o)!=NULL){
-				cout<<"___________"<<endl;
-				cout<<endl<<"Enemigo: "<<endl;
-				en.mostrar(0);
-				p = rand() % 4;
-				entidad *enfrentado = new entidad("",0,0,0,o);
-				switch(p){
-					case 0:
-						enfrentado=j1;
-						break;
-					case 1:
-						enfrentado=j1->aliado1;
-						break;
-					case 2:
-						enfrentado=j1->aliado2;
-						break;
-					case 3:
-						enfrentado=j1->aliado2;
-						break;
-				} 
-				if(j1->enfrentar(en)){
-					ens.eliminar(o);
-					cout<<endl<<"___________"<<endl<<endl<<"Victoria"<<endl<<"___________"<<endl<<endl;
+			j1->setPos(tirardados(j1->getPos(),y,piso));
+			while(ens.buscar(o)){
+				if(!(j1->enfrentar(en))){
+					return 0;	
 				}
-				else{
-					cout<<endl<<"___________"<<endl<<endl<<"Derrota"<<endl<<"___________"<<endl<<endl;
-					return 0;
-				}
-				j1->mostrar(0);
+				ens.eliminar(o);
+				j1->mostrarEquipo();
 				system("pause");
 				system("cls");
 			}
 			if(cofres.buscar(o)!=NULL){
-				cout<<endl<<"Apareció un cofre..."<<endl;
 				cout<<endl;
-				cout<<"Encontraste :";
-				int cont = rand() % 3;
-				switch(cont){
-					case 0:{
-						p = 2*piso - rand() % 3;
-						j1->setArma(p);
-						break;
-					}
-					case 1:
-						cout<<"Aumentar PS_MAX";
-						j1->setPV_max(j1->getPV_max()+1);
-						break;
-					case 2:
-						cout<<"Recuperar PS";
-
-						p=j1->getPV_max()/10;
-						if (p==0){
-							p++;
-						}
-						j1->setPV(j1->getPV()+p);
-						if(j1->getPV()>j1->getPV_max()){
-							j1->setPV(j1->getPV_max());
-						}
-						break;
-				}
-				cout<<endl;
-				j1->mostrar(0);
+				j1->abrirCofre(piso);
+				j1->mostrarEquipo();
 				system("pause");
 				system("cls");
 			}
-			if(o[0]==y[0]&&o[1]==y[1]){
-				entidad aly = entidad(aliados[piso-1],piso+1,piso+1,piso,o);
-				asignar_aliado(aly,j1);
-				/*if (p!=0){
-					j1->setAliado(aly,p);
-				}*/
+			if(o[0]==y[0] && o[1]==y[1]){
+				tr=0;
+				entidad *al= new entidad(l_aliados[piso-1],piso,piso,piso-1,o);
+				j1->setAliado(al);
+				y[0]=1;y[1]=0;
+				system("pause");
+				system("cls");
 			}
 			
 		}
